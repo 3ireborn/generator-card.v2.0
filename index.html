@@ -1,358 +1,284 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Kartu E-Toll NPA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0f172a; color: white; font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
+        
+        /* Container Kartu Fix (Ukuran Standar ID Card / E-Toll) */
+        .card-container {
+            width: 600px;
+            height: 380px;
+            min-width: 600px;
+            min-height: 380px;
+            background: radial-gradient(circle at 50% 50%, #1e1e1e 0%, #000000 100%);
+            border: 1px solid #333;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255, 255, 255, 0.1);
+        }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        /* Desain Chip (Posisi Standar Smart Card) */
+        .chip {
+            width: 55px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+            border: 1px solid #64748b;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3), 0 4px 6px rgba(0,0,0,0.5);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 1px;
+            padding: 2px;
+        }
+        .chip div { border: 1px solid rgba(100, 116, 139, 0.5); border-radius: 2px; }
 
-<title>NPA Smart System Card Generator V2.0</title>
+        /* Silver Emboss 3D yang Sangat Mewah */
+        .silver-emboss {
+            color: #f8fafc; /* Warna dasar putih silver */
+            text-shadow: 
+                -1px -1px 0px #ffffff, 
+                1px 1px 0px #64748b,  
+                2px 2px 4px rgba(0,0,0,0.9), 
+                3px 3px 8px rgba(0,0,0,0.7);
+        }
 
-<!-- Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
+        /* Frame Foto KTP Style */
+        .photo-frame {
+            width: 105px;
+            height: 125px;
+            border-radius: 8px;
+            border: 2px solid #94a3b8;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+            background-color: #334155;
+        }
 
-<!-- html2canvas -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        /* Teks Silver Biasa */
+        .text-silver { color: #cbd5e1; }
 
-<!-- Google Font -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Cinzel:wght@500;700;900&display=swap"
-rel="stylesheet">
-
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/card.css">
-<link rel="stylesheet" href="css/effects.css">
-<link rel="stylesheet" href="css/responsive.css">
-
+        #scaleWrapper { transform-origin: top center; transition: transform 0.1s ease-in-out; }
+    </style>
 </head>
-
-<body class="bg-slate-950 text-white">
-
-<!-- ================= HEADER ================= -->
-
-<header class="py-6 border-b border-yellow-700">
-
-<div class="max-w-7xl mx-auto px-5">
-
-<h1 class="text-center text-4xl font-black text-yellow-400 tracking-wider">
-
-NPA SMART SYSTEM
-
-</h1>
-
-<p class="text-center text-gray-400 mt-2 tracking-[5px]">
-
-BLACK GOLD LUXURY EDITION
-
-</p>
-
-</div>
-
-</header>
-
-<!-- ================= CONTENT ================= -->
-
-<div class="max-w-7xl mx-auto px-5 py-8">
-
-<div class="grid lg:grid-cols-2 gap-10">
-
-<!-- ======================================= -->
-<!-- FORM -->
-<!-- ======================================= -->
-
-<div>
-
-<div class="bg-slate-900 rounded-2xl p-6 border border-slate-700 shadow-xl">
-
-<h2 class="text-2xl font-bold text-yellow-400 mb-6">
-
-DATA MEMBER
-
-</h2>
-
-<!-- Nama -->
-
-<div class="mb-5">
-
-<label class="block mb-2">
-
-Nama Member
-
-</label>
-
-<input
-
-id="memberName"
-
-type="text"
-
-placeholder="SUGIARTO KURNIAWAN"
-
-class="w-full rounded-xl bg-slate-800 border border-slate-700 p-4 focus:outline-none focus:border-yellow-500">
-
-</div>
-
-<!-- ID -->
-
-<div class="mb-5">
-
-<label class="block mb-2">
-
-ID MEMBER
-
-</label>
-
-<input
-
-id="memberID"
-
-type="text"
-
-placeholder="000022061970"
-
-class="w-full rounded-xl bg-slate-800 border border-slate-700 p-4 focus:outline-none focus:border-yellow-500">
-
-</div>
-
-<!-- Level -->
-
-<div class="mb-5">
-
-<label class="block mb-2">
-
-LEVEL MEMBER
-
-</label>
-
-<select
-
-id="memberLevel"
-
-class="w-full rounded-xl bg-slate-800 border border-slate-700 p-4">
-
-<option>Silver</option>
-
-<option>Gold</option>
-
-<option>Platinum</option>
-
-<option selected>VVIP</option>
-
-</select>
-
-</div>
-
-<!-- Upload Logo -->
-
-<div class="mb-5">
-
-<label class="block mb-2">
-
-Logo NPA
-
-</label>
-
-<input
-
-type="file"
-
-id="logoUpload"
-
-class="w-full">
-
-</div>
-
-<!-- Upload Foto -->
-
-<div class="mb-8">
-
-<label class="block mb-2">
-
-Foto Member
-
-</label>
-
-<input
-
-type="file"
-
-id="photoUpload"
-
-class="w-full">
-
-</div>
-
-<button
-
-id="downloadCard"
-
-class="w-full py-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-black text-lg">
-
-DOWNLOAD PNG
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ======================================= -->
-<!-- PREVIEW -->
-<!-- ======================================= -->
-
-<div>
-
-<div class="flex justify-center">
-
-<div
-
-id="card"
-
-class="card">
-
-<!-- Reflection -->
-
-<div class="reflection"></div>
-
-<!-- Gold Curve -->
-
-<div class="goldCurve"></div>
-
-
-<div class="light-top"></div>
-
-<div class="light-bottom"></div>
-  
-<div class="cardGlass"></div>
-
-<div class="cardShimmer"></div>
-
-<div class="cardParticles">
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-   <span></span>
-</div>
-HTML
-<!-- Header -->
-
-<div class="cardHeader">
-
-<div class="logoArea">
-
-<h1>NPA</h1>
-
-<h2>SMART SYSTEM</h2>
-
-<p>NGANGGUR PRENEUR AKADEMI</p>
-
-</div>
-
-</div>
-
-<!-- Middle -->
-
-<div class="cardMiddle">
-
-<div class="chip"></div>
-
-<div class="vipArea">
-
-<div class="stars">
-
-★★★★★
-
-</div>
-
-<div class="crown">
-
-👑
-
-</div>
-
-<h2>
-
-VVIP MEMBER
-
-</h2>
-
-<div class="stars">
-
-★★★★★
-
-</div>
-
-</div>
-
-</div>
-
-<!-- Footer -->
-
-<div class="cardFooter">
-
-<div>
-
-<label>
-
-NAMA MEMBER
-
-</label>
-
-<h3 id="previewName">
-
-SUGIARTO KURNIAWAN
-
-</h3>
-
-</div>
-
-<div class="mt-5">
-
-<label>
-
-ID MEMBER
-
-</label>
-
-<h4 id="previewID">
-
-000022061970
-
-</h4>
-
-</div>
-
-</div>
-
-<!-- Globe -->
-
-<div class="worldIcon">
-
-🌐
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- JS -->
-
-<script src="js/app.js"></script>
-
-<script src="js/download.js"></script>
-
+<body class="min-h-screen flex flex-col items-center py-6 px-4">
+
+    <div class="text-center mb-6 mt-4">
+        <h1 class="text-2xl font-bold text-slate-300 mb-1">💳 Mesin Cetak ID / E-Toll NPA</h1>
+        <p class="text-gray-400 text-sm">Silver Emboss Edition & Daun Kelapa Pattern</p>
+    </div>
+
+    <!-- PANEL INPUT FORM -->
+    <div class="bg-slate-800 p-6 rounded-xl shadow-lg w-full max-w-xl mb-8 border border-slate-700">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block text-sm font-bold text-slate-300 mb-1">NAMA MEMBER</label>
+                <input type="text" id="inputName" placeholder="Contoh: KURNIAWAN" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-white focus:border-slate-400 focus:outline-none" oninput="updateCard()">
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-slate-300 mb-1">ID MEMBER</label>
+                <input type="text" id="inputId" placeholder="Contoh: 0000 2206 1970" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-white focus:border-slate-400 focus:outline-none" oninput="updateCard()">
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+                <label class="block text-sm font-bold text-slate-300 mb-1">LEVEL MEMBER</label>
+                <select id="inputLevel" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-white focus:border-slate-400 focus:outline-none" onchange="updateCard()">
+                    <option value="Silver Member" selected>Silver</option>
+                    <option value="Gold Member">Gold</option>
+                    <option value="Premium Member">Premium</option>
+                    <option value="VVIP Member">VVIP</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-slate-300 mb-1">FOTO MEMBER</label>
+                <input type="file" id="inputPhoto" accept="image/*" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-1.5 text-sm text-gray-400 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-bold file:bg-slate-300 file:text-slate-900 hover:file:bg-slate-200" onchange="loadPhoto(event)">
+            </div>
+        </div>
+        <button onclick="downloadCard()" class="w-full bg-gradient-to-r from-slate-300 to-slate-400 hover:from-slate-200 hover:to-slate-300 text-slate-900 font-black py-4 rounded-xl shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 uppercase tracking-widest">
+            <span>📥 DOWNLOAD KARTU (PNG)</span>
+        </button>
+    </div>
+
+    <!-- PREVIEW KARTU -->
+    <div class="w-full flex justify-center pb-10 overflow-hidden">
+        <div id="flexWrapper" style="position: relative;">
+            <div id="scaleWrapper">
+                
+                <!-- KARTU ASLI -->
+                <div id="vvipCard" class="card-container p-8 z-10 shrink-0">
+                    
+                    <!-- Background Daun Kelapa SVG (Opacity Sangat Tipis) -->
+                    <svg class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.06]" viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Batang Utama -->
+                        <path d="M -50,420 Q 300,190 650,-50" stroke="white" stroke-width="6"/>
+                        <!-- Daun Atas/Kanan -->
+                        <path d="M 50,348 Q 150,200 300,150" stroke="white" stroke-width="2"/>
+                        <path d="M 150,285 Q 250,150 400,100" stroke="white" stroke-width="2"/>
+                        <path d="M 250,221 Q 350,100 500,50" stroke="white" stroke-width="2"/>
+                        <path d="M 350,158 Q 450,50 600,20" stroke="white" stroke-width="2"/>
+                        <path d="M 450,95 Q 550,0 650,-20" stroke="white" stroke-width="2"/>
+                        <!-- Daun Bawah/Kiri -->
+                        <path d="M 100,316 Q 200,370 350,390" stroke="white" stroke-width="2"/>
+                        <path d="M 200,253 Q 300,310 450,340" stroke="white" stroke-width="2"/>
+                        <path d="M 300,190 Q 400,250 550,290" stroke="white" stroke-width="2"/>
+                        <path d="M 400,126 Q 500,190 650,240" stroke="white" stroke-width="2"/>
+                        <path d="M 500,63 Q 600,130 700,190" stroke="white" stroke-width="2"/>
+                    </svg>
+
+                    <!-- TOP CENTER: Logo NPA -->
+                    <div class="absolute top-6 left-1/2 transform -translate-x-1/2 text-center z-20 w-full flex flex-col items-center">
+                        <div class="flex justify-center items-center gap-1">
+                            <h1 class="text-[38px] font-black tracking-tighter text-yellow-500" style="text-shadow: 0 4px 6px rgba(0,0,0,0.8);">NPA</h1>
+                            <div class="text-yellow-500 text-lg font-bold -mt-6 ml-[-10px] transform rotate-45">↗</div>
+                        </div>
+                        <h2 class="text-[10px] font-bold tracking-[0.3em] text-yellow-400 -mt-2 mb-1">SMART SYSTEM</h2>
+                        <h3 class="text-[7px] font-bold tracking-[0.2em] text-silver">NGANGGUR PRENEUR AKADEMI</h3>
+                    </div>
+
+                    <!-- KIRI TENGAH: Chip (Diturunkan) -->
+                    <div class="chip absolute top-[160px] left-[40px] z-20">
+                        <div></div><div></div><div></div>
+                        <div></div><div></div><div></div>
+                        <div></div><div></div><div></div>
+                    </div>
+
+                    <!-- KANAN ATAS: Foto & Level Member -->
+                    <div class="absolute top-8 right-[40px] z-20 flex flex-col items-center">
+                        <img id="cardPhoto" src="https://via.placeholder.com/150/334155/cbd5e1?text=FOTO" class="photo-frame mb-3" alt="Foto">
+                        <!-- Teks tanpa blok -->
+                        <div id="cardLevel" class="text-gray-300 text-[11px] font-bold tracking-widest uppercase drop-shadow-lg" style="text-shadow: 1px 1px 3px rgba(0,0,0,1);">
+                            Silver Member
+                        </div>
+                    </div>
+
+                    <!-- KIRI BAWAH: Nama & ID (Silver Emboss & Tidak Nabrak) -->
+                    <div class="absolute bottom-8 left-[40px] z-30">
+                        <p class="text-[9px] font-bold tracking-widest text-gray-400 mb-1">NAMA MEMBER</p>
+                        <!-- max-width mencegah teks nabrak foto/elemen lain -->
+                        <p id="cardName" class="text-[26px] font-black mb-3 silver-emboss truncate w-[350px]">
+                            Kurniawan
+                        </p>
+                        
+                        <p class="text-[9px] font-bold tracking-widest text-gray-400 mb-1">ID MEMBER</p>
+                        <p id="cardId" class="text-[22px] font-medium tracking-widest silver-emboss font-serif italic">
+                            0000 2206 1970
+                        </p>
+                    </div>
+
+                    <!-- KANAN BAWAH: Motto Silver -->
+                    <div class="absolute bottom-6 right-[40px] z-20 text-[8px] tracking-[0.2em] text-slate-300 font-medium opacity-80" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
+                        BERJUANG • BERKARYA • BERKAH
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fitur Auto-Scale layar HP
+        function adjustScale() {
+            const flexWrapper = document.getElementById('flexWrapper');
+            const wrapper = document.getElementById('scaleWrapper');
+            const cardWidth = 600;
+            const cardHeight = 380;
+            const screenWidth = window.innerWidth - 32; 
+            
+            if (screenWidth < cardWidth) {
+                const scaleValue = screenWidth / cardWidth; 
+                wrapper.style.transform = `scale(${scaleValue})`;
+                flexWrapper.style.width = `${cardWidth * scaleValue}px`;
+                flexWrapper.style.height = `${cardHeight * scaleValue}px`; 
+            } else {
+                wrapper.style.transform = 'scale(1)';
+                flexWrapper.style.width = `${cardWidth}px`;
+                flexWrapper.style.height = `${cardHeight}px`;
+            }
+        }
+
+        window.onload = adjustScale;
+        window.addEventListener('resize', adjustScale);
+
+        // Fungsi mengubah teks jadi Huruf Kapital di awal (Title Case)
+        function toTitleCase(str) {
+            return str.toLowerCase().split(' ').map(function(word) {
+                return (word.charAt(0).toUpperCase() + word.slice(1));
+            }).join(' ');
+        }
+
+        // Update Text
+        function updateCard() {
+            const rawName = document.getElementById('inputName').value;
+            // Gunakan fungsi toTitleCase agar tidak huruf besar semua
+            document.getElementById('cardName').innerText = rawName ? toTitleCase(rawName) : 'Kurniawan';
+            
+            const idVal = document.getElementById('inputId').value;
+            document.getElementById('cardId').innerText = idVal ? idVal : '0000 2206 1970';
+
+            const levelVal = document.getElementById('inputLevel').value;
+            document.getElementById('cardLevel').innerText = levelVal;
+        }
+
+        // Upload & Tampilkan Foto
+        function loadPhoto(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                document.getElementById('cardPhoto').src = reader.result;
+            };
+            if(event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+
+        // Fitur Download HTML to PNG
+        function downloadCard() {
+            const card = document.getElementById('vvipCard');
+            const wrapper = document.getElementById('scaleWrapper');
+            const btn = document.querySelector('button');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '⏳ SEDANG MEMPROSES...';
+            
+            const currentTransform = wrapper.style.transform;
+            wrapper.style.transform = 'scale(1)';
+            
+            setTimeout(() => {
+                html2canvas(card, {
+                    scale: 3, 
+                    backgroundColor: "#000000",
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
+                    wrapper.style.transform = currentTransform;
+
+                    const link = document.createElement('a');
+                    link.download = `E-Toll-Card-${document.getElementById('inputName').value || 'NPA'}.png`;
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                    
+                    btn.innerHTML = '✅ BERHASIL DIUNDUH!';
+                    btn.classList.replace('bg-gradient-to-r', 'bg-green-500');
+                    btn.classList.remove('from-slate-300', 'to-slate-400');
+
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.add('bg-gradient-to-r', 'from-slate-300', 'to-slate-400');
+                        btn.classList.remove('bg-green-500');
+                    }, 3000);
+                }).catch(err => {
+                    wrapper.style.transform = currentTransform;
+                    console.error("Gagal cetak kartu:", err);
+                    alert("Gagal memproses gambar. Coba lagi.");
+                });
+            }, 150); 
+        }
+    </script>
 </body>
-
 </html>
