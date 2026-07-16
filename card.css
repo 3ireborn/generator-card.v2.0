@@ -723,3 +723,394 @@ font-size:24px;
 }
 
    }
+/* ===================================================
+   NPA Smart System Card Generator V2.0
+   card.css - PART C
+   Luxury Finish
+===================================================*/
+
+
+/*=========================================
+  GOLD SHIMMER
+=========================================*/
+
+.card::marker{
+display:none;
+}
+
+.cardShimmer{
+
+position:absolute;
+
+top:-180%;
+
+left:-60%;
+
+width:40%;
+
+height:400%;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.10),
+
+rgba(255,215,0,.40),
+
+rgba(255,255,255,.08),
+
+transparent);
+
+transform:rotate(25deg);
+
+animation:shimmer 7s linear infinite;
+
+pointer-events:none;
+
+z-index:30;
+
+}
+
+@keyframes shimmer{
+
+0%{
+
+left:-70%;
+
+}
+
+100%{
+
+left:160%;
+
+}
+
+}
+
+
+/*=========================================
+  GLASS OVERLAY
+=========================================*/
+
+.cardGlass{
+
+position:absolute;
+
+inset:0;
+
+background:
+
+linear-gradient(
+
+180deg,
+
+rgba(255,255,255,.10),
+
+transparent 25%,
+
+transparent 70%,
+
+rgba(255,255,255,.03));
+
+pointer-events:none;
+
+z-index:20;
+
+}
+
+
+/*=========================================
+  GOLD PARTICLES
+=========================================*/
+
+.cardParticles{
+
+position:absolute;
+
+inset:0;
+
+pointer-events:none;
+
+z-index:12;
+
+overflow:hidden;
+
+}
+
+.cardParticles span{
+
+position:absolute;
+
+width:4px;
+
+height:4px;
+
+background:#f6c453;
+
+border-radius:50%;
+
+opacity:.35;
+
+animation:floatParticle 12s linear infinite;
+
+}
+
+.cardParticles span:nth-child(1){
+
+top:20%;
+
+left:15%;
+
+animation-delay:0s;
+
+}
+
+.cardParticles span:nth-child(2){
+
+top:70%;
+
+left:25%;
+
+animation-delay:2s;
+
+}
+
+.cardParticles span:nth-child(3){
+
+top:30%;
+
+left:80%;
+
+animation-delay:4s;
+
+}
+
+.cardParticles span:nth-child(4){
+
+top:80%;
+
+left:65%;
+
+animation-delay:6s;
+
+}
+
+.cardParticles span:nth-child(5){
+
+top:55%;
+
+left:50%;
+
+animation-delay:8s;
+
+}
+
+@keyframes floatParticle{
+
+0%{
+
+transform:translateY(0);
+
+opacity:.2;
+
+}
+
+50%{
+
+opacity:.6;
+
+}
+
+100%{
+
+transform:translateY(-40px);
+
+opacity:0;
+
+}
+
+}
+
+
+/*=========================================
+  HOVER PREMIUM
+=========================================*/
+
+.card{
+
+transform-style:preserve-3d;
+
+perspective:1000px;
+
+}
+
+.card:hover{
+
+transform:
+
+rotateX(4deg)
+
+rotateY(-4deg)
+
+translateY(-8px);
+
+transition:.45s;
+
+}
+
+
+/*=========================================
+  GOLD GLOW
+=========================================*/
+
+.card:hover{
+
+box-shadow:
+
+0 30px 80px rgba(0,0,0,.8),
+
+0 0 45px rgba(246,196,83,.28),
+
+0 0 120px rgba(246,196,83,.10);
+
+}
+
+
+/*=========================================
+  TEXT GLOW
+=========================================*/
+
+.logoArea h1,
+
+.vipArea h2,
+
+#previewName,
+
+#previewID{
+
+transition:.35s;
+
+}
+
+.card:hover .logoArea h1,
+
+.card:hover .vipArea h2,
+
+.card:hover #previewName,
+
+.card:hover #previewID{
+
+text-shadow:
+
+0 0 6px rgba(255,255,255,.15),
+
+0 0 15px rgba(246,196,83,.45),
+
+0 0 35px rgba(246,196,83,.25);
+
+}
+
+
+/*=========================================
+  CHIP SHINE
+=========================================*/
+
+.chip{
+
+overflow:hidden;
+
+}
+
+.chip::before{
+
+animation:chipLight 4s linear infinite;
+
+}
+
+@keyframes chipLight{
+
+0%{
+
+opacity:.4;
+
+}
+
+50%{
+
+opacity:1;
+
+}
+
+100%{
+
+opacity:.4;
+
+}
+
+}
+
+
+/*=========================================
+  WORLD ICON
+=========================================*/
+
+.worldIcon{
+
+transition:.4s;
+
+}
+
+.card:hover .worldIcon{
+
+transform:rotate(360deg);
+
+}
+
+
+/*=========================================
+  MOBILE
+=========================================*/
+
+@media(max-width:768px){
+
+.card:hover{
+
+transform:none;
+
+}
+
+.cardShimmer{
+
+animation-duration:10s;
+
+}
+
+}
+
+
+/*=========================================
+  PRINT QUALITY
+=========================================*/
+
+@media print{
+
+body{
+
+background:white;
+
+}
+
+.card{
+
+box-shadow:none;
+
+filter:none;
+
+}
+
+}
